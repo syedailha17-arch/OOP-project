@@ -37,13 +37,6 @@ public class RegistrationSystem {
         return count;
     }
 
-    public int getTotalCredits(Student s){
-        int total = 0;
-        for(Course c : s.getRegisteredCourses()){
-            total += c.getCredits();
-        }
-        return total;
-    }
 
     public void registerStudent(String studentId, String courseCode) throws RegistrationException{
         Student s = findStudent(studentId);
@@ -66,7 +59,7 @@ public class RegistrationSystem {
             }
         }
 
-        int newTotal = getTotalCredits(s) + c.getCredits();
+        int newTotal = s.getTotalCredits() + c.getCredits();
         if(newTotal > MAX_CREDITS)
             throw new RegistrationException("you have chosen: " + newTotal + " credits, maximum limit for credits: " + MAX_CREDITS);
 
@@ -101,5 +94,26 @@ public class RegistrationSystem {
         s.removeRegisteredCourse(c);
 
         System.out.println("student: " + studentId + " has dropped from course: " + courseCode);
+    }
+
+    public void showAcademicSummary(String studentId) throws RegistrationException{
+        System.out.println("===== Academic Summary =====");
+        Student s = findStudent(studentId);
+        if(s==null)
+            throw new RegistrationException("Student not found: " + studentId);
+
+        System.out.println(s.getName() + " -> " + s.getId());
+
+        if(s.getRegisteredCourses() == null || s.getRegisteredCourses().isEmpty())
+            System.out.println("no courses registered");
+
+        else{
+            System.out.println("Registered courses: ");
+            for(Course rc : s.getRegisteredCourses())
+                System.out.println(rc.getCourseCode() + " , " + rc.getCourseName() + " , " + rc.getCredits());
+        }
+        System.out.println("Total credits: " + s.getTotalCredits());
+        System.out.println("Courses completed: " + s.getCompletedCourses());
+        System.out.println("Remaining credits: " + (MAX_CREDITS - s.getTotalCredits()));
     }
 }
