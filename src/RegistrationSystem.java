@@ -77,4 +77,29 @@ public class RegistrationSystem {
         s.addRegisteredCourse(c);
         System.out.println("Registered " + studentId + " for " + courseCode);
     }
+
+    public void dropCourse(String studentId, String courseCode) throws RegistrationException{
+        Student s = findStudent(studentId);
+        if(s==null)
+            throw new RegistrationException("Student not found: " + studentId);
+
+        Course c = findCourse(courseCode);
+        if(c==null)
+            throw new RegistrationException("Course not found: " + courseCode);
+
+        Registration found = null;
+        for(Registration r : registrations){
+            if(r.getStudentId().equals(studentId) && r.getCourseCode().equals(courseCode)){
+                found = r;
+                break;
+            }
+        }
+        if(found == null){
+            throw new RegistrationException("not registered for " + courseCode);
+        }
+        registrations.remove(found);
+        s.removeRegisteredCourse(c);
+
+        System.out.println("student: " + studentId + " has dropped from course: " + courseCode);
+    }
 }
