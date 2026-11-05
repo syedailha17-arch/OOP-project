@@ -66,11 +66,15 @@ public class RegistrationSystem {
             }
         }
 
-        int limit = getTotalCredits(s) + c.getCredits();
-        if(limit > MAX_CREDITS)
-            throw new RegistrationException("you have chosen: " + limit + " credits, maximum limit for credits: " + MAX_CREDITS);
+        int newTotal = getTotalCredits(s) + c.getCredits();
+        if(newTotal > MAX_CREDITS)
+            throw new RegistrationException("you have chosen: " + newTotal + " credits, maximum limit for credits: " + MAX_CREDITS);
 
         if(getEnrolledCount(courseCode) >= c.getMaxCapacity())
             throw new RegistrationException("the course: " + courseCode + " is already full");
+
+        registrations.add(new Registration(studentId, courseCode));
+        s.addRegisteredCourse(c);
+        System.out.println("Registered " + studentId + " for " + courseCode);
     }
 }
