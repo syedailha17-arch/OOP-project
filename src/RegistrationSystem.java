@@ -44,4 +44,33 @@ public class RegistrationSystem {
         }
         return total;
     }
+
+    public void registerStudent(String studentId, String courseCode) throws RegistrationException{
+        Student s = findStudent(studentId);
+        if(s==null)
+            throw new RegistrationException("Student not found: " + studentId);
+
+        Course c = findCourse(courseCode);
+        if(c==null)
+            throw new RegistrationException("Course not found: " + courseCode);
+
+        for(Course rc : s.getRegisteredCourses()){
+            if(rc.getCourseCode().equals(courseCode))
+                throw new RegistrationException("Already registered for " + courseCode);
+        }
+
+        String prereq = c.getPrerequisiteCode();
+        if(prereq != null && !prereq.isEmpty()){
+            if(!s.getCompletedCourses().contains(prereq)){
+                throw new RegistrationException("Prerequisite " + prereq + " not completed for " + courseCode);
+            }
+        }
+
+        int limit = getTotalCredits(s) + c.getCredits();
+        if(limit > MAX_CREDITS)
+            throw new RegistrationException("you have chosen: " + limit + " credits, maximum limit for credits: " + MAX_CREDITS);
+
+        if(getEnrolledCount(courseCode) >= c.getMaxCapacity())
+            throw new RegistrationException("the course: " + courseCode + " is already full");
+    }
 }
