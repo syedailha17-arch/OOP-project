@@ -12,6 +12,21 @@ public class RegistrationSystem {
         registrations = new ArrayList<>();
     }
 
+    public ArrayList<Registration> getRegistrations(){
+        return registrations;
+    }
+
+    public void restoreRegistration(String studentId, String courseCode){
+        Student s = findStudent(studentId);
+        Course c = findCourse(courseCode);
+        if(s == null || c == null){
+            return;
+        }
+        registrations.add(new Registration(studentId, courseCode));
+        s.addRegisteredCourse(c);
+        c.incrementEnrolled();
+    }
+
     public Student findStudent(String id){
         for(Student s : students){
             if(s.getId().equals(id))
@@ -68,6 +83,7 @@ public class RegistrationSystem {
 
         registrations.add(new Registration(studentId, courseCode));
         s.addRegisteredCourse(c);
+        c.incrementEnrolled();
         System.out.println("Registered " + studentId + " for " + courseCode);
     }
 
@@ -92,16 +108,17 @@ public class RegistrationSystem {
         }
         registrations.remove(found);
         s.removeRegisteredCourse(c);
+        c.decrementEnrolled();
 
         System.out.println("student: " + studentId + " has dropped from course: " + courseCode);
     }
 
     public void showAcademicSummary(String studentId) throws RegistrationException{
-        System.out.println("===== Academic Summary =====");
         Student s = findStudent(studentId);
         if(s==null)
             throw new RegistrationException("Student not found: " + studentId);
 
+        System.out.println("===== Academic Summary =====");
         System.out.println(s.getName() + " -> " + s.getId());
 
         if(s.getRegisteredCourses() == null || s.getRegisteredCourses().isEmpty())
