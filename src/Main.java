@@ -32,7 +32,10 @@ public class Main {
                 case 6 -> viewAcademicSummary();
                 case 7 -> viewStudentsInCourse();
                 case 8 -> saveData();
-                case 9 -> System.out.println("Goodbye!");
+                case 9 -> {
+                    saveData();
+                    System.out.println("Goodbye!");
+                }
                 default -> System.out.println("Invalid choice! Try again.");
             }
 
