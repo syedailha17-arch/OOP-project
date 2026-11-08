@@ -4,7 +4,7 @@ public class RegistrationSystem {
     private ArrayList<Student> students;
     private ArrayList<Course> courses;
     private ArrayList<Registration> registrations;
-    private static final int MAX_CREDITS = 24;
+    private static final int MAX_CREDITS = 20;
 
     public RegistrationSystem(ArrayList<Student> students, ArrayList<Course> courses){
         this.students = students;
