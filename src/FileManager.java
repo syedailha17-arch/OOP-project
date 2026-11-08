@@ -1,14 +1,16 @@
 import java.io.*;
 import java.util.ArrayList;
 public class FileManager {
-    public static void saveCourses(ArrayList<Course> courses){
+    public static boolean saveCourses(ArrayList<Course> courses){
         try(FileWriter fw = new FileWriter("data/courses.csv")){
             for(Course c : courses){
                 String prereq = (c.getPrerequisiteCode() == null)? "" : c.getPrerequisiteCode();
                 fw.write(c.getCourseCode() + "," + c.getCourseName() + "," + c.getCredits() + "," + prereq + "," + c.getMaxCapacity() + "\n");
             }
+            return true;
         }catch(IOException e){
             System.out.println("error saving: " + e.getMessage());
+            return false;
         }
     }
 
@@ -32,14 +34,16 @@ public class FileManager {
         return courses;
     }
 
-    public static void saveStudents(ArrayList<Student> students){
+    public static boolean saveStudents(ArrayList<Student> students){
         try(FileWriter fw = new FileWriter("data/students.csv")){
             for(Student s : students){
                 String completed = String.join(";", s.getCompletedCourses());
                 fw.write(s.getId() + "," + s.getName() + "," + s.getDepartment() + "," + s.getSemester() + "," + completed + "\n");
             }
+            return true;
         }catch(IOException e){
             System.out.println("error saving the file: " + e.getMessage());
+            return false;
         }
     }
 
@@ -68,13 +72,15 @@ public class FileManager {
         return students;
     }
 
-    public static void saveRegistrations(ArrayList<Registration> registrations){
+    public static boolean saveRegistrations(ArrayList<Registration> registrations){
         try(FileWriter fw = new FileWriter("data/registrations.csv")){
             for(Registration r : registrations){
                 fw.write(r.toCSV() + "\n");
             }
+            return true;
         }catch(IOException e){
             System.out.println("error saving the file: " + e.getMessage());
+            return false;
         }
     }
 

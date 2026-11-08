@@ -234,9 +234,15 @@ public class Main {
     }
 
     static void saveData() {
-        FileManager.saveStudents(students);
-        FileManager.saveCourses(courses);
-        FileManager.saveRegistrations(system.getRegistrations());
-        System.out.println("Data saved successfully!");
+        boolean ok = FileManager.saveStudents(students)
+          & FileManager.saveCourses(courses)
+          & FileManager.saveRegistrations(system.getRegistrations());
+
+        if(ok == true){
+            System.out.println("Data saved successfully!");
+        }
+        else{
+            System.out.println("Data was not saved!");
+        }
     }
 }
