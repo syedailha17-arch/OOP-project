@@ -10,7 +10,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // Load data from files when app starts
         students.addAll(FileManager.loadStudents());
         courses.addAll(FileManager.loadCourses());
         system = new RegistrationSystem(students, courses);
@@ -32,19 +31,19 @@ public class Main {
                 case 6 -> viewAcademicSummary();
                 case 7 -> viewStudentsInCourse();
                 case 8 -> saveData();
-                case 9 -> {
+                case 9 -> dropCourse();
+                case 10 -> {
                     saveData();
                     System.out.println("Goodbye!");
                 }
                 default -> System.out.println("Invalid choice! Try again.");
             }
 
-        } while (choice != 9);
+        } while (choice != 10);
 
         scanner.close();
     }
 
-    // ── MENU ──────────────────────────────────────────────
     static void printMenu() {
         System.out.println("\n=============================");
         System.out.println(" STUDENT REGISTRATION SYSTEM");
@@ -57,11 +56,10 @@ public class Main {
         System.out.println("6. View Academic Summary");
         System.out.println("7. View Students in a Course");
         System.out.println("8. Save Data");
-        System.out.println("9. Exit");
+        System.out.println("9. Drop Course");
+        System.out.println("10. Exit");
         System.out.println("=============================");
     }
-
-    // ── MODULE A: STUDENT MANAGEMENT ─────────────────────
 
     static void addStudent() {
         System.out.println("\n--- Add Student ---");
@@ -123,8 +121,6 @@ public class Main {
         }
     }
 
-    // ── MODULE B: COURSE CATALOGUE ────────────────────────
-
     static void addCourse() {
         System.out.println("\n--- Add Course ---");
 
@@ -181,8 +177,6 @@ public class Main {
         }
     }
 
-    // ── MODULE C, D, E: BABAR'S METHODS ──────────────────
-
     static void registerStudentForCourse() {
         System.out.println("\n--- Register Student for Course ---");
         System.out.print("Enter Student ID: ");
@@ -236,15 +230,29 @@ public class Main {
         }
     }
 
+    static void dropCourse() {
+        System.out.println("\n--- Drop Course ---");
+        System.out.print("Enter Student ID: ");
+        String studentId = scanner.nextLine().trim();
+
+        System.out.print("Enter Course Code to drop: ");
+        String courseCode = scanner.nextLine().trim();
+
+        try {
+            system.dropCourse(studentId, courseCode);
+        } catch (RegistrationException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
     static void saveData() {
         boolean ok = FileManager.saveStudents(students)
           & FileManager.saveCourses(courses)
           & FileManager.saveRegistrations(system.getRegistrations());
 
-        if(ok == true){
+        if (ok) {
             System.out.println("Data saved successfully!");
-        }
-        else{
+        } else {
             System.out.println("Data was not saved!");
         }
     }
